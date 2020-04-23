@@ -1,0 +1,28 @@
+# listenAddr is ip and port to listen on (e.g. 0.0.0.0:9988).
+listenAddr        = "0.0.0.0:9999"
+# predefinedProxies is the list of proxy addresses.
+# Should be in the following format: scheme://ip:port
+# If the list isn't empty only PredefinedProxies would be used
+# and all the following settings would be ignored.
+# If the list isn't empty byt no valid looking addresses found following settings would be tried anyway.
+predefinedProxies = ["http://127.0.0.1"]
+# type accepts "socks5", "http" and "https".
+# If empty defaults to "socks5".
+type              = "socks5"
+# validPeriod set in minutes.
+# Tells how long to use acquired proxies before rotate.
+# If ValidPeriod is 0 proxyes list would be refreshed only after all the proxies are served to this service's client(s).
+validPeriod       = 0
+# excludeCountries is the string of comma separated ISO 3166-1 alpha-2 country codes.
+# Proxies located in these countries would be avoided.
+excludeCountries  = "RU,CN,IR,BH,ID,PK"
+# urlTemplate is the string template to fill with proxy type and country exclusions.
+# It would be just fmt.Sprintf'ed.
+# Some examples:
+# "http://pubproxy.com/api/proxy?type=%s&not_country=%s&post=true&https=true"
+# "https://api.getproxylist.com/proxy?protocol=%s&notCountry=%s&allowsPost=true&allowsHttps=true"
+# "https://gimmeproxy.com/api/getProxy?post=true&supportsHttps=true&protocol=%s&notCountry=%s"
+# "https://api.proxyscrape.com/?request=displayproxies&proxytype=%s&timeout=7000"
+urlTemplate       = "https://api.proxyscrape.com/?request=displayproxies&proxytype=%s&timeout=7000"
+# method to use calling proxy provider api. Defaults to "GET".
+method            = "GET"
