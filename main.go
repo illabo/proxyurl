@@ -127,7 +127,7 @@ func main() {
 			if err != nil {
 				http.Error(res, err.Error(), http.StatusInternalServerError)
 			}
-			res.Write([]byte(purl.String()))
+			res.Write([]byte(purl))
 		}),
 	)
 }
@@ -155,7 +155,8 @@ func requestProxiesList(with *http.Client, from string) []string {
 	return parseServerAndHostFromRes(bbyt)
 }
 
-func validProxyURL(addr string, fallbkScm string) (*url.URL, error) {
+func validProxyURL(addr string, fallbkScm string) (string, error) {
+	addr = strings.Trim(addr, "\n\t\r 	")
 	if strings.HasPrefix(addr, "socks5://") == false &&
 		strings.HasPrefix(addr, "https://") == false &&
 		strings.HasPrefix(addr, "http://") == false {
@@ -164,7 +165,11 @@ func validProxyURL(addr string, fallbkScm string) (*url.URL, error) {
 		}
 		addr = fmt.Sprintf("%s://%s", fallbkScm, addr)
 	}
-	return url.Parse(addr)
+	u, err := url.Parse(addr)
+	if err != nil {
+		return "", err
+	}
+	return u.String(), err
 }
 
 func sanitizePredifinedList(pxy []string) []string {
@@ -172,7 +177,7 @@ func sanitizePredifinedList(pxy []string) []string {
 	for _, p := range pxy {
 		u, err := validProxyURL(p, "")
 		if err == nil {
-			cleanList = append(cleanList, u.String())
+			cleanList = append(cleanList, u)
 		}
 	}
 	return cleanList
